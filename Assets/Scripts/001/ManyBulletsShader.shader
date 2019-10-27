@@ -1,7 +1,7 @@
 ﻿Shader "Custom/MenyBulletsShader" {
   SubShader {
     // アルファを使う
-    ZWrite On
+    ZWrite Off
     // Blend SrcAlpha OneMinusSrcAlpha
     Blend OneMinusSrcAlpha One
     
@@ -60,6 +60,9 @@
       {
         VSOut output;
         
+        if(input[0].state==0){
+          return;
+        }
         // 全ての頂点で共通の値を計算しておく
         float4 pos = input[0].pos; 
         float4 col = input[0].col;
@@ -86,8 +89,8 @@
             output.pos = mul (UNITY_MATRIX_VP, output.pos);
             
             // 色
-            output.col += col;
-            output.col[3]=0.5;
+            output.col = col;
+            // output.col[3]=0.5;
 
             // ストリームに頂点を追加
             outStream.Append (output);
